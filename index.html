@@ -49,18 +49,25 @@
         camera.updateProjectionMatrix();
       });
 
-      // fog = new Fog({ color: 3, near: 0.1, far: 5 });
+      renderer.setClearColor(0x9decfa, 1);
+      // var backlight = new THREE.AmbientLight(0x404040); // soft white light
+      // scene.add(backlight);
+      // // fog = new Fog({ color: 3, near: 0.1, far: 5 });
+
+      // fogColor = new THREE.Color(0xffffff);
+
+      // scene.background = fogColor;
+      // scene.fog = new THREE.Fog(fogColor, 0.25, 1);
 
       //orbit control
-      controls = new THREE.OrbitControls(camera, renderer.domElement);
 
       //create shape
       var geometry = new THREE.BoxGeometry(2, 2, 2);
       var material = new THREE.MeshBasicMaterial({ color: 0xffffff });
       var cube = new THREE.Mesh(geometry, material);
-      scene.add(cube);
+      // scene.add(cube);
 
-      var light = new THREE.AmbientLight(0x6d7d71, 5);
+      var light = new THREE.AmbientLight(0x404040, 18);
       scene.add(light);
       cube.position.z = -5;
       cube.position.y = 2;
@@ -89,13 +96,19 @@
 
       var testanime = () => {
         requestAnimationFrame(testanime);
-        if (camera.position.z > 30) {
-          scene.rotation.y += 0.01;
+        if (camera.position.y > 13) {
           camera.position.y -= 0.26;
+        }
+
+        if (camera.position.z > 23) {
+          scene.rotation.y += 0.01;
 
           camera.position.z -= 0.4;
         }
-        ship.position.z += 0.1;
+
+        if (ship.position.z < 100) {
+          ship.position.z += 0.1;
+        }
       };
 
       var Gameloop = function () {
@@ -108,10 +121,11 @@
 
       //button animation
       document.getElementById("btn").addEventListener("click", function () {
-        document.getElementById("btn").innerHTML = "Hello World";
         testanime();
         console.log("test");
       });
+
+      controls = new THREE.OrbitControls(camera, renderer.domElement);
 
       //add custom model
 
@@ -122,6 +136,7 @@
         function (gltf) {
           scene.add(gltf.scene);
           ship = gltf.scene;
+          ship.position.z = -50;
           console.log("the model is loaded ");
         },
         undefined,
