@@ -9,6 +9,9 @@
   <body>
     <button id="btn">start animation</button>
     <script src="/js/three.js"></script>
+
+    <script src="/js/GLTFLoader.js"></script>
+
     <script src="/js//OrbitControls.js"></script>
     <script>
       (function () {
@@ -78,7 +81,6 @@
       //update
       var update = function () {
         // cube.position.z += 0.09;
-        // camera.rotation.y += 0.01;
       };
 
       var render = function () {
@@ -87,7 +89,13 @@
 
       var testanime = () => {
         requestAnimationFrame(testanime);
-        camera.rotation.y += 0.01;
+        if (camera.position.z > 30) {
+          scene.rotation.y += 0.01;
+          camera.position.y -= 0.26;
+
+          camera.position.z -= 0.4;
+        }
+        ship.position.z += 0.1;
       };
 
       var Gameloop = function () {
@@ -102,8 +110,28 @@
       document.getElementById("btn").addEventListener("click", function () {
         document.getElementById("btn").innerHTML = "Hello World";
         testanime();
-        console.log("faggot");
+        console.log("test");
       });
+
+      //add custom model
+
+      //adding a geometric cube
+      loader = new THREE.GLTFLoader();
+      loader.load(
+        "/model/scene.gltf",
+        function (gltf) {
+          scene.add(gltf.scene);
+          ship = gltf.scene;
+          console.log("the model is loaded ");
+        },
+        undefined,
+        function (error) {
+          console.error(error);
+        }
+      );
+
+      camera.position.y = 53;
+      camera.position.z = 100;
     </script>
   </body>
 </html>
